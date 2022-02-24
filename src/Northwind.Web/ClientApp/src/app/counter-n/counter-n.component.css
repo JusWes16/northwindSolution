@@ -1,0 +1,9 @@
+input{
+    display: block;
+    margin: 10px 0;
+}
+.success-msg{
+    color: green;
+    padding: 10px 0;
+    font-size: 1.1em;
+}

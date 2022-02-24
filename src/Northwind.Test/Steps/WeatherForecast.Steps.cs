@@ -15,6 +15,7 @@ namespace Northwind.Test.Features
 		private IWeatherForecastService _weather = null;
 		private WeatherForecast _forecast = null;
 		private Exception _serviceException = null;
+		private String _summary = null;
 
 		[Given(@"the weather forecast")]
 		public void The_weather_forecast()
@@ -37,13 +38,32 @@ namespace Northwind.Test.Features
 		[When(@"I get the forecast for yesterday")]
 		public void I_get_the_forecast_for_yesterday()
 		{
-			_forecast = _weather.ForecastFor(DateTime.Now.AddDays(-1));
+            try
+            {
+				_forecast = _weather.ForecastFor(DateTime.Now.AddDays(-1));
+			}
+			catch (Exception ex)
+            {
+				_serviceException = ex;
+            }
 		}
 
 		[Then(@"the service should throw an invalid argument exception")]
 		public void The_service_should_throw_an_argument_exception()
 		{
 			Assert.IsType<ArgumentException>(_serviceException);
+		}
+
+		[When(@"the temperature is 70")]
+		public void Temperature_is_70()
+		{
+			_summary = _weather.SummaryFor(21);
+		}
+
+		[Then(@"the forecast summary should be mild")]
+		public void The_forecast_summary_should_mild()
+		{
+			Assert.True(_summary == "Mild");
 		}
 	}
 }
